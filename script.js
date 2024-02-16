@@ -34,8 +34,41 @@ function playRound(playerSelection, computerSelection) {
   return `You Lose! ${computerSelection} beats ${playerSelection}`;
 }
 
-// Functions being put to use
-const playerChoice = "rock"; // This assumes a player's choice is rock
-const computerChoice = getComputerChoice(); // This gets computer's choice
-console.log("Computer's choice:", computerChoice);
-console.log(playRound(playerChoice, computerChoice));
+function playGame() {
+  let playerScore = 0;
+  let computerScore = 0;
+
+  for (let i = 0; i < 5; i++) {
+    const playerSelection = prompt(
+      "Enter your choice (rock, paper, or scissors):"
+    ).toLowerCase();
+    const computerSelection = getComputerChoice();
+
+    console.log("Round " + (i + 1) + ":");
+    console.log("You chose: " + playerSelection);
+    console.log("Computer chose: " + computerSelection);
+
+    const result = playRound(playerSelection, computerSelection);
+    console.log(result);
+
+    if (result.includes("win")) {
+      playerScore++;
+    } else if (result.includes("lose")) {
+      computerScore++;
+    }
+
+    console.log("Your score: " + playerScore);
+    console.log("Computer's score: " + computerScore);
+    console.log("-------------------");
+  }
+
+  if (playerScore > computerScore) {
+    console.log("Congratulations! You win the game!");
+  } else if (playerScore < computerScore) {
+    console.log("Sorry! You lost the game!");
+  } else {
+    console.log("It's a tie game!");
+  }
+}
+
+playGame();
