@@ -1,3 +1,6 @@
+let playerScore = 0;
+let computerScore = 0;
+
 function getComputerChoice() {
   // Array of possible choices
   let choices = ["rock", "paper", "scissors"];
@@ -7,68 +10,86 @@ function getComputerChoice() {
 
   return computerChoice;
 }
+document.addEventListener("DOMContentLoaded", function () {
+  // Function to get computer's choice
+  function getComputerChoice() {
+    // Array of possible choices
+    let choices = ["rock", "paper", "scissors"];
 
-// Function to play a single round of Rock Paper Scissors
-function playRound(playerSelection, computerSelection) {
-  // Convert playerSelection to lowercase for case insensitivity
-  playerSelection = playerSelection.toLowerCase();
+    // Randomly select computer's choice
+    let computerChoice = choices[Math.floor(Math.random() * choices.length)];
 
-  //  Define the winning scenarios
-  const winConditions = {
-    rock: "scissors",
-    paper: "rock",
-    scissors: "paper",
-  };
-
-  // The code below checkss if it's a tie
-  if (playerSelection === computerSelection) {
-    return "It's a tie";
+    return computerChoice;
   }
 
-  // The code below checks if a player wins
-  if (winConditions[playerSelection] === computerSelection) {
-    return `You Win! ${playerSelection} beats ${computerSelection}`;
-  }
+  // Function to play a single round of Rock Paper Scissors
+  function playRound(playerSelection, computerSelection) {
+    // Convert playerSelection to lowercase for case insensitivity
+    playerSelection = playerSelection.toLowerCase();
 
-  // If not a tie and player doesn't win, computer wins
-  return `You Lose! ${computerSelection} beats ${playerSelection}`;
-}
+    //  Define the winning scenarios
+    const winConditions = {
+      rock: "scissors",
+      paper: "rock",
+      scissors: "paper",
+    };
 
-function playGame() {
-  let playerScore = 0;
-  let computerScore = 0;
-
-  for (let i = 0; i < 5; i++) {
-    const playerSelection = prompt(
-      "Enter your choice (rock, paper, or scissors):"
-    ).toLowerCase();
-    const computerSelection = getComputerChoice();
-
-    console.log("Round " + (i + 1) + ":");
-    console.log("You chose: " + playerSelection);
-    console.log("Computer chose: " + computerSelection);
-
-    const result = playRound(playerSelection, computerSelection);
-    console.log(result);
-
-    if (result.includes("win")) {
-      playerScore++;
-    } else if (result.includes("lose")) {
-      computerScore++;
+    // The code below checkss if it's a tie
+    if (playerSelection === computerSelection) {
+      return "It's a tie";
     }
 
-    console.log("Your score: " + playerScore);
-    console.log("Computer's score: " + computerScore);
-    console.log("-------------------");
+    // The code below checks if a player wins
+    if (winConditions[playerSelection] === computerSelection) {
+      displayResult(`You Win! ${playerSelection} beats ${computerSelection}`);
+    } else {
+      // If not a tie and player doesn't win, computer wins
+      displayResult(`You Lose! ${computerSelection} beats ${playerSelection}`);
+    }
   }
 
-  if (playerScore > computerScore) {
-    console.log("Congratulations! You win the game!");
-  } else if (playerScore < computerScore) {
-    console.log("Sorry! You lost the game!");
-  } else {
-    console.log("It's a tie game!");
-  }
-}
+  const rockButton = document.getElementById("rock");
+  const paperButton = document.getElementById("paper");
+  const scissorsButtton = document.getElementById("scissors");
 
-playGame();
+  rockButton.addEventListener("click", handleButtonClick);
+  paperButton.addEventListener("click", handleButtonClick);
+  scissorsButtton.addEventListener("click", handleButtonClick);
+
+  // Function to handle button clicks
+  function handleButtonClick(event) {
+    const playerSelection = event.target.id;
+    const computerSelection = getComputerChoice();
+
+    const roundInfo = document.createElement("p");
+    roundInfo.textContent = "Round " + (playerScore + computerScore + 1) + ":";
+    document.getElementById("results").appendChild(roundInfo);
+
+    const playerChoiceInfo = document.createElement("p");
+    playerChoiceInfo.textContent = "You chose: " + playerSelection;
+    document.getElementById("results").appendChild(playerChoiceInfo);
+
+    const computerChoiceInfo = document.createElement("p");
+    computerChoiceInfo.textContent = "Computer chose: " + computerSelection;
+    document.getElementById("results").appendChild(computerChoiceInfo);
+
+    playRound(playerSelection, computerSelection);
+  }
+
+  // Function to display result in the results div
+  function displayResult(message) {
+    const resultInfo = document.createElement("p");
+    resultInfo.textContent = message;
+    document.getElementById("results").appendChild(resultInfo);
+  }
+  // Function to announce the winner
+  function announceWinner() {
+    if (playerScore > computerScore) {
+      displayResult("Congratulations! You win the game!");
+    } else if (playerScore < computerScore) {
+      displayResult("Sorry! You lost the game!");
+    } else {
+      displayResult("It's a tie game!");
+    }
+  }
+});
